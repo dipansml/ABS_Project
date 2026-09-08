@@ -19,6 +19,7 @@ import {
 } from '../API/machines';
 
 import CustomLoader from '../Components/CustomLoader';
+import { formatToDDMMYYYY } from '../Utils/CommonUtils';
 
 // ---------------------------------------------
 // Date helpers
@@ -191,7 +192,7 @@ const mapUtilizationState = (
         machineId: entry.mc_id,
 
         // New API date
-        date: entry.date,
+        date: formatToDDMMYYYY(entry.date),
 
         // Convert seconds to readable format
         runtime: formatDuration(entry.runtime),
@@ -271,8 +272,8 @@ const CircularProgress: React.FC<
 > = ({
   percent,
   status,
-  size = 42,
-  strokeWidth = 7,
+  size = 60,
+  strokeWidth = 6,
 }) => {
   const colors = STATUS_COLORS[status];
 
@@ -333,7 +334,7 @@ const CircularProgress: React.FC<
             styles.progressLabel,
             {
               color: colors.ring,
-              fontSize: size * 0.24,
+              fontSize: size * 0.2,
             },
           ]}
         >
@@ -1091,7 +1092,7 @@ const MachineCard: React.FC<{
 
           {/* Date */}
 
-          {machine.date ? (
+          {/* {machine.date ? (
             <Text
               style={
                 styles.machineDateText
@@ -1099,7 +1100,23 @@ const MachineCard: React.FC<{
             >
               Date : {machine.date}
             </Text>
-          ) : null}
+          ) : null} */}
+
+          <Text
+            style={
+              styles.machineIdText
+            }
+          >
+            Date :{' '}
+            <Text
+              style={
+                styles.dateLabel
+              }
+            >
+              {machine.date}
+            </Text>
+          </Text>
+
 
           {/* Runtime */}
 
@@ -1556,9 +1573,9 @@ const styles =
     },
 
     dateLabel: {
-      fontSize: 13,
+      fontSize: 11,
       fontWeight: '600',
-      color: '#1E3A8A',
+      color: '#111827',
       marginBottom: 6,
     },
 
@@ -1861,6 +1878,7 @@ const styles =
       fontSize: 11.5,
       color: '#6B7280',
       marginBottom: 5,
+      fontWeight: '600',
     },
 
     // -----------------------------------------
@@ -1893,12 +1911,12 @@ const styles =
     },
 
     statLabel: {
-      fontSize: 12.5,
+      fontSize: 11,
       color: '#374151',
     },
 
     statValue: {
-      fontSize: 12.5,
+      fontSize: 11,
       fontWeight: '700',
       color: '#111827',
       marginLeft: 4,
@@ -1916,13 +1934,13 @@ const styles =
       paddingHorizontal: 12,
       alignItems:
         'center',
-      width: 90,
-      height: 100,
+      width: 100,
+      height: 115,
     },
 
     utilizationLabel: {
-      fontSize: 11,
-      fontWeight: '700',
+      fontSize: 12,
+      fontWeight: '600',
       color: '#1E3A8A',
       marginBottom: 6,
       textAlign:
@@ -1943,7 +1961,8 @@ const styles =
     },
 
     progressLabel: {
-      fontWeight: '800',
+      fontWeight: '600',
+      fontSize: 10,
     },
 
     statusBadge: {

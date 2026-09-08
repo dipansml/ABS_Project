@@ -11,3 +11,10 @@ export const formatToYYYYMMDD = (date: Date): string => {
   const yyyy = date.getFullYear();
   return `${yyyy}-${mm}-${dd}`;
 };
+
+export const formatToDDMMYYYY = (date: string) => {
+  if (!date) return '';
+
+  const [year, month, day] = date.split('-');
+  return `${day}-${month}-${year}`;
+};

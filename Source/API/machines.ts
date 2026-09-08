@@ -6,10 +6,10 @@ import {
 
 // Local host
 // export const API_BASE_URL = 'http://192.168.1.163:8000';
-export const API_BASE_URL = 'http://192.168.1.140:8000';
+// export const API_BASE_URL = 'http://192.168.1.140:8000';
 
 // Live server
-//export const API_BASE_URL = 'http://182.73.216.91:8000';
+export const API_BASE_URL = 'http://182.73.216.91:8000';
 
 // Shape of the raw object the server sends (includes fields we don't use).
 type RawMachine = {
