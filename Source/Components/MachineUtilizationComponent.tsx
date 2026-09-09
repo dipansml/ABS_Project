@@ -47,7 +47,6 @@ export interface MachineData {
   image: string;
 }
 
-
 // ---------------------------------------------
 // Circular Progress
 // ---------------------------------------------
@@ -59,9 +58,7 @@ interface CircularProgressProps {
   strokeWidth?: number;
 }
 
-const CircularProgress: React.FC<
-  CircularProgressProps
-> = ({
+const CircularProgress: React.FC<CircularProgressProps> = ({
   percent,
   status,
   size = 60,
@@ -71,17 +68,11 @@ const CircularProgress: React.FC<
 
   const radius = (size - strokeWidth) / 2;
 
-  const circumference =
-    2 * Math.PI * radius;
+  const circumference = 2 * Math.PI * radius;
 
-  const progress = Math.max(
-    0,
-    Math.min(100, percent),
-  );
+  const progress = Math.max(0, Math.min(100, percent));
 
-  const strokeDashoffset =
-    circumference -
-    (progress / 100) * circumference;
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
     <View
@@ -90,10 +81,7 @@ const CircularProgress: React.FC<
         height: size,
       }}
     >
-      <Svg
-        width={size}
-        height={size}
-      >
+      <Svg width={size} height={size}>
         {/* Track */}
         <Circle
           cx={size / 2}
@@ -137,59 +125,36 @@ const CircularProgress: React.FC<
   );
 };
 
-
 // ---------------------------------------------
 // Statistic row
 // ---------------------------------------------
 
-const STAT_DOT_COLORS: Record<
-  string,
-  string
-> = {
+const STAT_DOT_COLORS: Record<string, string> = {
   Runtime: '#22C55E',
   'Idle Time': '#3B82F6',
   Downtime: '#F97316',
-  'Total Available Time':
-    '#8B5CF6',
+  'Total Available Time': '#8B5CF6',
 };
 
 const StatRow: React.FC<{
   label: string;
   value: string;
-}> = ({
-  label,
-  value,
-}) => (
+}> = ({ label, value }) => (
   <View style={styles.statRow}>
-    <View
-      style={
-        styles.statLabelWrap
-      }
-    >
+    <View style={styles.statLabelWrap}>
       <View
         style={[
           styles.statDot,
           {
-            backgroundColor:
-              STAT_DOT_COLORS[
-                label
-              ] ?? '#999',
+            backgroundColor: STAT_DOT_COLORS[label] ?? '#999',
           },
         ]}
       />
 
-      <Text
-        style={styles.statLabel}
-      >
-        {label}
-      </Text>
+      <Text style={styles.statLabel}>{label}</Text>
     </View>
 
-    <Text
-      style={styles.statValue}
-    >
-      {value}
-    </Text>
+    <Text style={styles.statValue}>{value}</Text>
   </View>
 );
 
@@ -199,65 +164,36 @@ const StatRow: React.FC<{
 
 const MachineCard: React.FC<{
   machine: MachineData;
-}> = ({
-  machine,
-}) => {
-  const colors =
-    STATUS_COLORS[
-      machine.status
-    ];
+}> = ({ machine }) => {
+  const colors = STATUS_COLORS[machine.status];
 
   return (
-    <View
-      style={styles.machineCard}
-    >
-      <View
-        style={styles.machineTopRow}
-      >
+    <View style={styles.machineCard}>
+      <View style={styles.machineTopRow}>
         {/* Machine Image */}
 
         <Image
           source={{
             uri: machine.image,
           }}
-          style={
-            styles.machineImage
-          }
+          style={styles.machineImage}
           resizeMode="cover"
         />
 
         {/* Machine Information */}
 
-        <View
-          style={styles.machineInfo}
-        >
+        <View style={styles.machineInfo}>
           {/* Machine Name */}
 
           {machine.name ? (
-            <Text
-              style={
-                styles.machineName
-              }
-            >
-              {machine.name}
-            </Text>
+            <Text style={styles.machineName}>{machine.name}</Text>
           ) : null}
 
           {/* Machine ID */}
 
-          <Text
-            style={
-              styles.machineIdText
-            }
-          >
+          <Text style={styles.machineIdText}>
             Machine ID :{' '}
-            <Text
-              style={
-                styles.machineIdValue
-              }
-            >
-              {machine.machineId}
-            </Text>
+            <Text style={styles.machineIdValue}>{machine.machineId}</Text>
           </Text>
 
           {/* Date */}
@@ -272,30 +208,13 @@ const MachineCard: React.FC<{
             </Text>
           ) : null} */}
 
-          <Text
-            style={
-              styles.machineIdText
-            }
-          >
-            Date :{' '}
-            <Text
-              style={
-                styles.dateLabel
-              }
-            >
-              {machine.date}
-            </Text>
+          <Text style={styles.machineIdText}>
+            Date : <Text style={styles.dateLabel}>{machine.date}</Text>
           </Text>
-
 
           {/* Runtime */}
 
-          <StatRow
-            label="Runtime"
-            value={
-              machine.runtime
-            }
-          />
+          <StatRow label="Runtime" value={machine.runtime} />
 
           {/* Idle */}
 
@@ -308,53 +227,31 @@ const MachineCard: React.FC<{
 
           {/* Downtime */}
 
-          <StatRow
-            label="Downtime"
-            value={
-              machine.downtime
-            }
-          />
+          <StatRow label="Downtime" value={machine.downtime} />
 
           {/* Total Available */}
 
           <StatRow
             label="Total Available Time"
-            value={
-              machine.totalAvailable
-            }
+            value={machine.totalAvailable}
           />
         </View>
 
         {/* Utilization */}
 
-        <View
-          style={
-            styles.utilizationBox
-          }
-        >
-          <Text
-            style={
-              styles.utilizationLabel
-            }
-          >
-            Utilization
-          </Text>
+        <View style={styles.utilizationBox}>
+          <Text style={styles.utilizationLabel}>Utilization</Text>
 
           <CircularProgress
-            percent={
-              machine.utilizationPercent
-            }
-            status={
-              machine.status
-            }
+            percent={machine.utilizationPercent}
+            status={machine.status}
           />
 
           <View
             style={[
               styles.statusBadge,
               {
-                backgroundColor:
-                  colors.badgeBg,
+                backgroundColor: colors.badgeBg,
               },
             ]}
           >
@@ -362,8 +259,7 @@ const MachineCard: React.FC<{
               style={[
                 styles.statusBadgeText,
                 {
-                  color:
-                    colors.badgeText,
+                  color: colors.badgeText,
                 },
               ]}
             >
@@ -411,7 +307,6 @@ const STATUS_COLORS: Record<
   },
 };
 
-
 // ---------------------------------------------
 // Machine Utilization Component
 // ---------------------------------------------
@@ -425,12 +320,7 @@ export interface MachineUtilizationComponentProps {
 
 const MachineUtilizationComponent: React.FC<
   MachineUtilizationComponentProps
-> = ({
-  machines,
-  loading = false,
-  error = null,
-  headerComponent = null,
-}) => {
+> = ({ machines, loading = false, error = null, headerComponent = null }) => {
   return (
     <FlatList
       style={styles.container}
@@ -438,9 +328,7 @@ const MachineUtilizationComponent: React.FC<
       showsVerticalScrollIndicator={false}
       data={machines}
       keyExtractor={item => item.id}
-      renderItem={({ item }) => (
-        <MachineCard machine={item} />
-      )}
+      renderItem={({ item }) => <MachineCard machine={item} />}
       ListHeaderComponent={headerComponent}
       ListEmptyComponent={
         !loading ? (
@@ -452,8 +340,10 @@ const MachineUtilizationComponent: React.FC<
             <View style={styles.centerWrap}>
               <Text style={styles.noDataText}>
                 No machine utilization
-                {'\
-'}
+                {
+                  '\
+'
+                }
                 data found.
               </Text>
             </View>
@@ -467,18 +357,17 @@ const MachineUtilizationComponent: React.FC<
 
 export default MachineUtilizationComponent;
 
-const CARD_SHADOW =
-  Platform.select({
-    ios: {
-      shadowColor: '#0F1E4D',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.08,
-      shadowRadius: 10,
-    },
-    android: {
-      elevation: 3,
-    },
-  });
+const CARD_SHADOW = Platform.select({
+  ios: {
+    shadowColor: '#0F1E4D',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+  },
+  android: {
+    elevation: 3,
+  },
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -520,8 +409,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   machineImage: {
-    width: 85,
-    height: 110,
+    width: 80,
+    height: 106,
     marginTop: 5,
     borderRadius: 14,
     backgroundColor: '#EEE',
@@ -558,25 +447,31 @@ const styles = StyleSheet.create({
   },
   statRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     marginTop: 3,
   },
+
   statLabelWrap: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flex: 1,
   },
+
   statDot: {
     width: 7,
     height: 7,
     borderRadius: 4,
     marginRight: 6,
+    marginTop: 3,
   },
+
   statLabel: {
     fontSize: 11,
     color: '#374151',
+    flexShrink: 1,
   },
+
   statValue: {
     fontSize: 11,
     fontWeight: '700',
