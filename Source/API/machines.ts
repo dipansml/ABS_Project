@@ -106,6 +106,7 @@ export interface MachineUtilization {
 export async function fetchUtilizationState(
   from: Date,
   to: Date,
+  machineIds?: string,
 ): Promise<MachineUtilization[]> {
   console.log(
     'Date',
@@ -116,7 +117,8 @@ export async function fetchUtilizationState(
   const url =
     `${API_BASE_URL}/api/machines/utilization/state` +
     `?from=${formatToYYYYMMDD(from)}` +
-    `&to=${formatToYYYYMMDD(to)}`;
+    `&to=${formatToYYYYMMDD(to)}` +
+    (machineIds ? `&mc_ids=${machineIds}` : '&mc_ids=All');
 
   console.log(
     'fetchUtilizationState: requesting',
