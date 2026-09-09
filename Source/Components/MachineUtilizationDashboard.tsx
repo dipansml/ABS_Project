@@ -319,75 +319,77 @@ const MachineUtilizationDashboard: React.FC = () => {
   // -----------------------------------------
 
   return (
-    <>
-      <MachineUtilizationComponent
-        machines={machines}
-        loading={loading}
-        error={error}
-        headerComponent={
-          <>
-            {/* Date Filter */}
+  <View style={styles.container}>
+    {/* Fixed Header - NOT inside ScrollView */}
+    <DateFilterBar
+      startDate={startDate}
+      endDate={endDate}
+      onChangeStartDate={setStartDate}
+      onChangeEndDate={setEndDate}
+      onSearch={handleSearch}
+      searching={loading}
+    />
 
-            <DateFilterBar
-              startDate={startDate}
-              endDate={endDate}
-              onChangeStartDate={setStartDate}
-              onChangeEndDate={setEndDate}
-              onSearch={handleSearch}
-              searching={loading}
+    <View style={styles.sectionHeader}>
+      <Text style={styles.sectionTitle}>
+        Machine Utilization Overview
+      </Text>
+
+      {machines.length > 0 ? (
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setShowMachineFilter(true)}
+            activeOpacity={0.7}
+          >
+            <Image
+              source={require('../Images/filter.png')}
+              style={styles.filterIcon}
+              resizeMode="contain"
             />
+          </TouchableOpacity>
 
-            {/* Section Header */}
+          <TouchableOpacity
+            style={styles.downloadButton}
+            onPress={() =>
+              downloadReport(
+                machines,
+                startDate,
+                endDate ?? startDate,
+              )
+            }
+            activeOpacity={0.7}
+          >
+            <Image
+              source={require('../Images/download.png')}
+              style={styles.filterIcon}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
 
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>
-                Machine Utilization Overview
-              </Text>
+          
+        </View>
+      ) : null}
+    </View>
 
-              {machines.length > 0 ? (
-                <TouchableOpacity
-                  style={styles.filterButton}
-                  onPress={() => setShowMachineFilter(true)}
-                  activeOpacity={0.7}
-                >
-                  <Image
-                    source={require('../Images/filter.png')}
-                    style={styles.filterIcon}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              ) : null}
-              {machines.length > 0 ? (
-                <TouchableOpacity
-                  style={styles.downloadButton}
-                  onPress={() => downloadReport(machines, startDate, endDate)}
-                  activeOpacity={0.7}
-                >
-                  <Image
-                    source={require('../Images/download.png')}
-                    style={styles.filterIcon}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              ) : null}
-            </View>
+    <View style={styles.sectionDivider} />
 
-            <View style={styles.sectionDivider} />
-          </>
-        }
-      />
+    {/* Only this part should scroll */}
+    <MachineUtilizationComponent
+      machines={machines}
+      loading={loading}
+      error={error}
+    />
 
-      {/* Machine Filter Modal */}
-
-      <MachineFilterModal
-        visible={showMachineFilter}
-        machineIds={availableMachineIds}
-        selectedMachineIds={selectedMachineIds}
-        onClose={() => setShowMachineFilter(false)}
-        onApply={handleMachineFilterApply}
-      />
-    </>
-  );
+    <MachineFilterModal
+      visible={showMachineFilter}
+      machineIds={availableMachineIds}
+      selectedMachineIds={selectedMachineIds}
+      onClose={() => setShowMachineFilter(false)}
+      onApply={handleMachineFilterApply}
+    />
+  </View>
+);
 };
 
 export default MachineUtilizationDashboard;
@@ -397,6 +399,12 @@ export default MachineUtilizationDashboard;
 // ---------------------------------------------
 
 const styles = StyleSheet.create({
+ container: {
+  flex: 1,
+  backgroundColor: '#F4F6FB',
+  paddingHorizontal: 16,
+},
+
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -413,6 +421,13 @@ const styles = StyleSheet.create({
     color: '#222',
   },
 
+actionButtons: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 8,
+},
+
+
   filterButton: {
     width: 30,
     height: 30,
@@ -420,7 +435,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#afccf8',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: -40,
   },
 
   downloadButton: {

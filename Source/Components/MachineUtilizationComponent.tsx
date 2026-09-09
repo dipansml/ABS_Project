@@ -372,11 +372,9 @@ const CARD_SHADOW = Platform.select({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4F6FB',
+    
   },
   contentContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
     paddingBottom: 24,
   },
   centerWrap: {
