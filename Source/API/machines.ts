@@ -18,6 +18,7 @@ type RawMachine = {
   image_url?: string;
   video_url?: string;
   detected_at?: string;
+  undetected_time?: number;
   status: Machine['status'];
   mc_id?: string;
   created_at?: string;
@@ -55,6 +56,7 @@ export async function fetchMachines(): Promise<Machine[]> {
       mc_id: m.mc_id,
       status: m.status,
       detected_at: m.detected_at,
+      undetected_time: m.undetected_time ?? 0,
       camera_status: m.camera_status,
     }));
   } catch (err) {
