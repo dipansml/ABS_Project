@@ -1,12 +1,9 @@
-
-
-
-
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Machine, STATUS_TO_SIGNAL } from '../Types/machine';
 import { resolveMediaUrl } from '../API/machines';
 import SignalIndicator from './SignalIndicator';
+import { formatDuration } from '../Utils/CommonUtils';
 
 type Props = {
   machine: Machine;
@@ -77,24 +74,43 @@ function MachineCard({ machine, onPress }: Props) {
 
         <View style={styles.infoBox}>
           <Text style={styles.label}>
-            Machine ID : <Text style={styles.machineIdValue}>{machine.mc_id}</Text>
+            Machine ID :{' '}
+            <Text style={styles.machineIdValue}>{machine.mc_id}</Text>
           </Text>
-{!isOffline && (
-  <View>
-    <Text style={styles.label}>
-      Capture Date : <Text style={styles.machineIdValue}>{formatDate(machine.detected_at)}</Text>
-    </Text>
-    <Text style={styles.label}>
-      Capture Time : <Text style={styles.machineIdValue}>{formatTime(machine.detected_at)}</Text>
-    </Text>
-  </View>
-)}        </View>
+          {!isOffline && (
+            <View>
+              <Text style={styles.label}>
+                Capture Date :{' '}
+                <Text style={styles.machineIdValue}>
+                  {formatDate(machine.detected_at)}
+                </Text>
+              </Text>
+              <Text style={styles.label}>
+                Capture Time :{' '}
+                <Text style={styles.machineIdValue}>
+                  {formatTime(machine.detected_at)}
+                </Text>
+              </Text>
+              {machine.undetected_time>0 && (
+               <Text style={styles.label}>
+                Undetected Time :{' '}
+                <Text style={styles.machineIdValue}>
+                  {formatDuration(machine.undetected_time)}
+                </Text>
+              </Text>
+              )}
+            </View>
+          )}{' '}
+        </View>
 
-{!isOffline && (
-  <View style={styles.signalBox}>
-    <SignalIndicator status={STATUS_TO_SIGNAL[machine.status]} size={50} />
-  </View>
-)}
+        {!isOffline && (
+          <View style={styles.signalBox}>
+            <SignalIndicator
+              status={STATUS_TO_SIGNAL[machine.status]}
+              size={50}
+            />
+          </View>
+        )}
 
         {/* <View style={styles.signalBox}>
           <SignalIndicator status={STATUS_TO_SIGNAL[machine.status]} size={50} />
@@ -122,8 +138,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageBox: {
-    width: 140,
-    height: 100,
+    width: 100,
+    height: 80,
     borderRadius: 8,
     backgroundColor: '#f0f0f0',
     overflow: 'hidden',
@@ -145,7 +161,7 @@ const styles = StyleSheet.create({
   },
   playIcon: {
     color: '#fff',
-    fontSize: 28,
+    fontSize: 26,
   },
   offlineBox: {
     justifyContent: 'center',
@@ -171,7 +187,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   label: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '400',
     marginBottom: 4,
     color: '#1a1a1a',
@@ -179,6 +195,7 @@ const styles = StyleSheet.create({
   machineIdValue: {
     color: '#1E3A8A',
     fontWeight: '600',
+    fontSize: 11,
   },
   signalBox: {
     width: 60,

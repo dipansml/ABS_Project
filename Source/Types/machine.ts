@@ -12,6 +12,7 @@ export type Machine = {
   name: string;
   mc_id?: string;
   detected_at?: string;
+  undetected_time: number;
   camera_status?: string;
   image_url?: string;
   video_url?: string;
