@@ -88,12 +88,11 @@ const mapUtilizationState = (state: MachineUtilization[]): MachineData[] => {
 
   return state
     .filter(item => item && item.mc_id)
-    .sort((a, b) => a.mc_id.localeCompare(b.mc_id))
     .map(entry => {
       const utilization = Number(entry.utilization_percent || 0);
 
       return {
-        id: entry.mc_id,
+        id: `${entry.mc_id}-${entry.date}`,
 
         name: '',
 
@@ -184,6 +183,8 @@ const MachineUtilizationDashboard: React.FC = () => {
         const mappedMachines = mapUtilizationState(state);
 
         setMachines(mappedMachines);
+        console.log('Mapped machines:', mappedMachines);
+        console.log('Mapped machines1:', state);
 
         // Get machine IDs from API response
         const uniqueIds = Array.from(
@@ -319,77 +320,69 @@ const MachineUtilizationDashboard: React.FC = () => {
   // -----------------------------------------
 
   return (
-  <View style={styles.container}>
-    {/* Fixed Header - NOT inside ScrollView */}
-    <DateFilterBar
-      startDate={startDate}
-      endDate={endDate}
-      onChangeStartDate={setStartDate}
-      onChangeEndDate={setEndDate}
-      onSearch={handleSearch}
-      searching={loading}
-    />
+    <View style={styles.container}>
+      {/* Fixed Header - NOT inside ScrollView */}
+      <DateFilterBar
+        startDate={startDate}
+        endDate={endDate}
+        onChangeStartDate={setStartDate}
+        onChangeEndDate={setEndDate}
+        onSearch={handleSearch}
+        searching={loading}
+      />
 
-    <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}>
-        Machine Utilization Overview
-      </Text>
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Machine Utilization Overview</Text>
 
-      {machines.length > 0 ? (
-        <View style={styles.actionButtons}>
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => setShowMachineFilter(true)}
-            activeOpacity={0.7}
-          >
-            <Image
-              source={require('../Images/filter.png')}
-              style={styles.filterIcon}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
+        {machines.length > 0 ? (
+          <View style={styles.actionButtons}>
+            <TouchableOpacity
+              style={styles.filterButton}
+              onPress={() => setShowMachineFilter(true)}
+              activeOpacity={0.7}
+            >
+              <Image
+                source={require('../Images/filter.png')}
+                style={styles.filterIcon}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.downloadButton}
-            onPress={() =>
-              downloadReport(
-                machines,
-                startDate,
-                endDate ?? startDate,
-              )
-            }
-            activeOpacity={0.7}
-          >
-            <Image
-              source={require('../Images/download.png')}
-              style={styles.filterIcon}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.downloadButton}
+              onPress={() =>
+                downloadReport(machines, startDate, endDate ?? startDate)
+              }
+              activeOpacity={0.7}
+            >
+              <Image
+                source={require('../Images/download.png')}
+                style={styles.filterIcon}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+      </View>
 
-          
-        </View>
-      ) : null}
+      <View style={styles.sectionDivider} />
+
+      {/* Only this part should scroll */}
+      <MachineUtilizationComponent
+        machines={machines}
+        loading={loading}
+        error={error}
+      />
+
+      <MachineFilterModal
+        visible={showMachineFilter}
+        machineIds={availableMachineIds}
+        selectedMachineIds={selectedMachineIds}
+        onClose={() => setShowMachineFilter(false)}
+        onApply={handleMachineFilterApply}
+      />
     </View>
-
-    <View style={styles.sectionDivider} />
-
-    {/* Only this part should scroll */}
-    <MachineUtilizationComponent
-      machines={machines}
-      loading={loading}
-      error={error}
-    />
-
-    <MachineFilterModal
-      visible={showMachineFilter}
-      machineIds={availableMachineIds}
-      selectedMachineIds={selectedMachineIds}
-      onClose={() => setShowMachineFilter(false)}
-      onApply={handleMachineFilterApply}
-    />
-  </View>
-);
+  );
 };
 
 export default MachineUtilizationDashboard;
@@ -399,11 +392,11 @@ export default MachineUtilizationDashboard;
 // ---------------------------------------------
 
 const styles = StyleSheet.create({
- container: {
-  flex: 1,
-  backgroundColor: '#F4F6FB',
-  paddingHorizontal: 16,
-},
+  container: {
+    flex: 1,
+    backgroundColor: '#F4F6FB',
+    paddingHorizontal: 16,
+  },
 
   sectionHeader: {
     flexDirection: 'row',
@@ -421,12 +414,11 @@ const styles = StyleSheet.create({
     color: '#222',
   },
 
-actionButtons: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 8,
-},
-
+  actionButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
 
   filterButton: {
     width: 30,
