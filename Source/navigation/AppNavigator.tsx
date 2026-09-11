@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import SplashScreen from '../Screens/SplashScreen';
 import Dashboard from '../Screens/Dashboard';
 import VideoPlayerScreen from '../Screens/VideoPlayerScreen';
 import SettingsScreen from '../Screens/Settings';
@@ -14,10 +15,19 @@ function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Dashboard"
+        initialRouteName="Splash"
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name="Dashboard" component={Dashboard} />
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{ animation: 'fade', animationDuration: 500 }}
+        />
+        <Stack.Screen
+          name="Dashboard"
+          component={Dashboard}
+          options={{ animation: 'fade', animationDuration: 500 }}
+        />
 
         {/* <Stack.Screen
           name="VideoPlayer"
@@ -29,14 +39,14 @@ function AppNavigator() {
         /> */}
 
         <Stack.Screen
-  name="VideoPlayer"
-  component={VideoPlayerScreen}
-  options={{
-    headerShown: false,
-    presentation: 'transparentModal',
-    animation: 'fade',
-  }}
-/>
+          name="VideoPlayer"
+          component={VideoPlayerScreen}
+          options={{
+            headerShown: false,
+            presentation: 'transparentModal',
+            animation: 'fade',
+          }}
+        />
 
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="KPI" component={KpiScreen} />
