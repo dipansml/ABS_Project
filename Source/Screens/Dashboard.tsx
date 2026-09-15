@@ -22,6 +22,7 @@ import { Machine } from '../Types/machine';
 import { RootStackParamList } from '../Types/Navigation';
 import { colors, spacing } from '../Utils/dimensions';
 import CustomLoader from '../Components/CustomLoader';
+import { Socket } from 'socket.io-client';
 
 
 type DashboardNavProp = NativeStackNavigationProp<
