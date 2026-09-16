@@ -231,9 +231,11 @@ const MachineUtilizationDashboard: React.FC = () => {
   // -----------------------------------------
 
   const handleSearch = () => {
-    if (!endDate) {
-      setError('Please select an End Date before searching.');
-
+    if (!startDate || !endDate) {
+      Alert.alert(
+        'Date Required',
+        'Please enter start date and end date both to get data.',
+      );
       return;
     }
 
@@ -281,6 +283,13 @@ const MachineUtilizationDashboard: React.FC = () => {
     from: Date,
     to: Date,
   ) => {
+    if (!startDate || !endDate) {
+      Alert.alert(
+        'Date Required',
+        'Please enter start date and end date both to Download Report.',
+      );
+      return;
+    }
     try {
       const formatDate = (date: Date) => {
         const year = date.getFullYear();
@@ -314,7 +323,18 @@ const MachineUtilizationDashboard: React.FC = () => {
       Alert.alert('Download Failed', 'Unable to download the report.');
     }
   };
-
+ const openFilterDialog = () => {
+    if (!startDate || !endDate) {
+      Alert.alert(
+        'Date Required',
+        'Please enter start date and end date both to get data.',
+      );
+      return;
+    } else {
+     setShowMachineFilter(true);
+    }
+  };
+ 
   // -----------------------------------------
   // UI
   // -----------------------------------------
@@ -338,7 +358,7 @@ const MachineUtilizationDashboard: React.FC = () => {
           <View style={styles.actionButtons}>
             <TouchableOpacity
               style={styles.filterButton}
-              onPress={() => setShowMachineFilter(true)}
+             onPress={() => openFilterDialog()}
               activeOpacity={0.7}
             >
               <Image
@@ -351,7 +371,7 @@ const MachineUtilizationDashboard: React.FC = () => {
             <TouchableOpacity
               style={styles.downloadButton}
               onPress={() =>
-                downloadReport(machines, startDate, endDate ?? startDate)
+                downloadReport(machines, startDate, endDate )
               }
               activeOpacity={0.7}
             >

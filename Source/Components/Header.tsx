@@ -2,21 +2,18 @@
 
 import React from 'react';
 import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, spacing } from '../Utils/dimensions';
 
 const HEADER_ASPECT_RATIO = 772 / 206; // was 772 / 223 — larger number = shorter header
 
 function Header() {
-  const insets = useSafeAreaInsets();
-
   return (
     <ImageBackground
       source={require('../Images/header-bg.jpg')}
       style={styles.header}
       resizeMode="cover"
     >
-      <View style={[styles.content, { paddingTop: insets.top + spacing.sm }]}>
+      <View style={styles.content}>
         <Image
           source={require('../Images/inmmlogo.png')}
           style={styles.logo}
@@ -41,6 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
     paddingBottom: spacing.md,
   },
   logo: {
