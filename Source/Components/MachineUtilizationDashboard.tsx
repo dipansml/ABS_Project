@@ -170,6 +170,15 @@ const MachineUtilizationDashboard: React.FC = () => {
 
   const loadUtilization = useCallback(
     async (from: Date, to: Date, machineIds?: string) => {
+      console.log;
+      if (!from || !to) {
+        Alert.alert(
+          'Date Required',
+          'Please enter start date and end date both to get data.',
+        );
+        return;
+      }
+
       try {
         setLoading(true);
         setError(null);
@@ -231,9 +240,11 @@ const MachineUtilizationDashboard: React.FC = () => {
   // -----------------------------------------
 
   const handleSearch = () => {
-    if (!endDate) {
-      setError('Please select an End Date before searching.');
-
+    if (!startDate || !endDate) {
+      Alert.alert(
+        'Date Required',
+        'Please enter start date and end date both to get data.',
+      );
       return;
     }
 
@@ -254,15 +265,17 @@ const MachineUtilizationDashboard: React.FC = () => {
   // -----------------------------------------
 
   const handleMachineFilterApply = (ids: string[]) => {
+    if (!startDate || !endDate) {
+      Alert.alert(
+        'Date Required',
+        'Please enter start date and end date both to get data.',
+      );
+      return;
+    }
+
     setSelectedMachineIds(ids);
 
     setShowMachineFilter(false);
-
-    if (!endDate) {
-      setError('Please select an End Date before filtering.');
-
-      return;
-    }
 
     const isAllSelected =
       machineIds.length > 0 &&
@@ -281,39 +294,59 @@ const MachineUtilizationDashboard: React.FC = () => {
     from: Date,
     to: Date,
   ) => {
-    try {
-      const formatDate = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
+    if (!startDate || !endDate) {
+      Alert.alert(
+        'Date Required',
+        'Please enter start date and end date both to download report.',
+      );
+      return;
+    }
+      try {
+        const formatDate = (date: Date) => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
 
-        return `${year}-${month}-${day}`;
-      };
+          return `${year}-${month}-${day}`;
+        };
 
-      const fromDate = formatDate(from);
-      const toDate = formatDate(to);
+        const fromDate = formatDate(from);
+        const toDate = formatDate(to);
 
-      const machineIds = machines
-        .map(machine => machine.machineId)
-        .filter(Boolean);
+        const machineIds = machines
+          .map(machine => machine.machineId)
+          .filter(Boolean);
 
-      const mcIds = machineIds.length > 0 ? machineIds.join(',') : 'ALL';
+        const mcIds = machineIds.length > 0 ? machineIds.join(',') : 'ALL';
 
-      const url =
-        `${API_BASE_URL}/api/machines/utilization/download` +
-        `?from=${fromDate}` +
-        `&to=${toDate}` +
-        `&mc_ids=${mcIds}`;
+        const url =
+          `${API_BASE_URL}/api/machines/utilization/download` +
+          `?from=${fromDate}` +
+          `&to=${toDate}` +
+          `&mc_ids=${mcIds}`;
 
-      console.log('Download URL:', url);
+        console.log('Download URL:', url);
 
-      await Linking.openURL(url);
-    } catch (error) {
-      console.error('Download Error:', error);
+        await Linking.openURL(url);
+      } catch (error) {
+        console.error('Download Error:', error);
 
-      Alert.alert('Download Failed', 'Unable to download the report.');
+        Alert.alert('Download Failed', 'Unable to download the report.');
+      }
+  };
+
+  const openFilterDialog = () => {
+    if (!startDate || !endDate) {
+      Alert.alert(
+        'Date Required',
+        'Please enter start date and end date both to get data.',
+      );
+      return;
+    } else {
+     setShowMachineFilter(true);
     }
   };
+
 
   // -----------------------------------------
   // UI
@@ -338,7 +371,7 @@ const MachineUtilizationDashboard: React.FC = () => {
           <View style={styles.actionButtons}>
             <TouchableOpacity
               style={styles.filterButton}
-              onPress={() => setShowMachineFilter(true)}
+              onPress={() => openFilterDialog()}
               activeOpacity={0.7}
             >
               <Image
@@ -351,7 +384,7 @@ const MachineUtilizationDashboard: React.FC = () => {
             <TouchableOpacity
               style={styles.downloadButton}
               onPress={() =>
-                downloadReport(machines, startDate, endDate ?? startDate)
+                downloadReport(machines, startDate, endDate)
               }
               activeOpacity={0.7}
             >
