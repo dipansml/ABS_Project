@@ -297,15 +297,15 @@ const MachineUtilizationDashboard: React.FC = () => {
     if (!startDate || !endDate) {
       Alert.alert(
         'Date Required',
-        'Please enter start date and end date both to download report.',
+        'Please enter start date and end date both to Download Report.',
       );
       return;
     }
-      try {
-        const formatDate = (date: Date) => {
-          const year = date.getFullYear();
-          const month = String(date.getMonth() + 1).padStart(2, '0');
-          const day = String(date.getDate()).padStart(2, '0');
+    try {
+      const formatDate = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
 
           return `${year}-${month}-${day}`;
         };
@@ -346,8 +346,7 @@ const MachineUtilizationDashboard: React.FC = () => {
      setShowMachineFilter(true);
     }
   };
-
-
+ 
   // -----------------------------------------
   // UI
   // -----------------------------------------
@@ -371,7 +370,7 @@ const MachineUtilizationDashboard: React.FC = () => {
           <View style={styles.actionButtons}>
             <TouchableOpacity
               style={styles.filterButton}
-              onPress={() => openFilterDialog()}
+             onPress={() => openFilterDialog()}
               activeOpacity={0.7}
             >
               <Image
@@ -384,7 +383,7 @@ const MachineUtilizationDashboard: React.FC = () => {
             <TouchableOpacity
               style={styles.downloadButton}
               onPress={() =>
-                downloadReport(machines, startDate, endDate)
+                downloadReport(machines, startDate, endDate )
               }
               activeOpacity={0.7}
             >
